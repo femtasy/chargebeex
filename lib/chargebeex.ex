@@ -4,6 +4,12 @@ defmodule Chargebeex do
   [Chargebee
   API](https://apidocs.chargebee.com/docs/api?prod_cat_ver=1&lang=curl)
   of the **version 1 of the product catalog**.
+
+  ## Testing
+
+  This library provides a behaviour for each one of the modules of the
+  supported resources to implement your own [behaviour
+  mocks](https://github.com/dashbitco/mox).
   """
 
   @doc """
