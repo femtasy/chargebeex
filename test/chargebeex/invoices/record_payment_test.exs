@@ -8,7 +8,6 @@ defmodule Chargebeex.Invoices.RecordPaymentTest do
       transaction_id = "GATEWAY-TRANSACTION-ID"
       transaction_date = DateTime.to_unix(DateTime.utc_now())
       invoice_id = "invoice_id_2342"
-      invoice = %{"invoice" => %{"id" => invoice_id, "status" => "payment_due"}}
 
       response_body = %{
         "invoice" => %{"id" => invoice_id},
@@ -36,7 +35,7 @@ defmodule Chargebeex.Invoices.RecordPaymentTest do
       end)
 
       assert {:ok, ^response_body} =
-               RecordPayment.record_payment(invoice, transaction_id, transaction_date,
+               RecordPayment.record_payment(invoice_id, transaction_id, transaction_date,
                  comment: "An invoice comment",
                  payment_method: "a payment method"
                )

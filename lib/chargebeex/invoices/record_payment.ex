@@ -22,7 +22,7 @@ defmodule Chargebeex.Invoices.RecordPayment do
   @spec record_payment(map, String.t(), date :: integer()) ::
           {:ok, map} | {:error, term}
   def record_payment(
-        %{"invoice" => %{"id" => invoice_id, "status" => "payment_due"}},
+        invoice_id,
         id_at_gateway,
         transaction_date,
         opts \\ []

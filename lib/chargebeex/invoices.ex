@@ -13,7 +13,7 @@ defmodule Chargebeex.Invoices do
 
     @callback record_payment(map(), String.t(), integer()) :: {:ok, map} | {:error, term}
 
-    @callback record_payment(map(), String.t(), integer(), keyword()) ::
+    @callback record_payment(String.t(), String.t(), integer(), keyword()) ::
                 {:ok, map} | {:error, term}
   end
 
@@ -23,6 +23,6 @@ defmodule Chargebeex.Invoices do
   defdelegate find_all_pending(customer_id), to: FindPendingByCustomerId
 
   @impl __MODULE__.Behaviour
-  defdelegate record_payment(invoice, id_at_gateway, transaction_date, opts \\ []),
+  defdelegate record_payment(invoice_id, id_at_gateway, transaction_date, opts \\ []),
     to: RecordPayment
 end
