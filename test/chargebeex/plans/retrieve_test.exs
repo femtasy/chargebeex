@@ -43,7 +43,7 @@ defmodule Chargebeex.Plans.RetrieveTest do
            body: response_body,
            method: :get,
            status: 200,
-           url: "https://pinkinternet-test.chargebee.com/api/v2/plans/#{plan_id}"
+           url: "/plans/#{plan_id}"
          }}
       end)
 
