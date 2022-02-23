@@ -27,7 +27,8 @@ defmodule Chargebeex.Subscriptions.Cancel do
   def cancel_subscription(
         subscription_id,
         opts \\ []
-      ) do
+      )
+      when is_binary(subscription_id) do
     end_of_term = Keyword.get(opts, :end_of_term, false)
 
     Client.new()

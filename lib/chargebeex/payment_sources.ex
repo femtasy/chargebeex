@@ -9,7 +9,7 @@ defmodule Chargebeex.PaymentSources do
   defmodule Behaviour do
     @moduledoc false
 
-    @callback by_customer_id(customer_id :: integer()) :: {:ok, map} | {:error, term}
+    @callback by_customer_id(customer_id :: String.t()) :: {:ok, map} | {:error, term}
 
     @callback filter_valid_payment_sources(list(map())) :: list(map())
   end

@@ -13,7 +13,7 @@ defmodule Chargebeex.Subscriptions.Retrieve do
   """
   @spec retrieve_subscription(subscription_id :: String.t()) ::
           {:ok, map} | {:error, term}
-  def retrieve_subscription(subscription_id) do
+  def retrieve_subscription(subscription_id) when is_binary(subscription_id) do
     Client.new()
     |> Tesla.get("/subscriptions/#{subscription_id}")
     |> Client.handle_response()

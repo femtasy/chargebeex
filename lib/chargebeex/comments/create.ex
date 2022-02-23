@@ -18,7 +18,7 @@ defmodule Chargebeex.Comments.Create do
           entity_id :: String.t(),
           comment :: String.t()
         ) :: {:ok, map} | {:error, term}
-  def create_comment(entity_type, entity_id, comment) do
+  def create_comment(entity_type, entity_id, comment) when is_binary(entity_id) do
     Client.new()
     |> Tesla.post("/comments", %{
       "entity_id" => entity_id,

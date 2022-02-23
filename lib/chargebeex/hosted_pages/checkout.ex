@@ -18,7 +18,8 @@ defmodule Chargebeex.HostedPages.Checkout do
           locale :: String.t()
         ) ::
           {:error, any} | {:ok, map()}
-  def create_checkout(plan_id, customer_id, email, locale) do
+  def create_checkout(plan_id, customer_id, email, locale)
+      when is_binary(plan_id) and is_binary(customer_id) do
     Client.new()
     |> Tesla.post("/hosted_pages/checkout_new", build_body(plan_id, customer_id, email, locale))
     |> Client.handle_response()

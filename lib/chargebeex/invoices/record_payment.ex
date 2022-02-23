@@ -19,14 +19,15 @@ defmodule Chargebeex.Invoices.RecordPayment do
   docs](https://www.chargebee.com/docs/1.0/payment-method-overview.html)
   for more info.
   """
-  @spec record_payment(map, String.t(), date :: integer()) ::
+  @spec record_payment(invoice_id :: String.t(), id_at_gateway :: String.t(), date :: integer()) ::
           {:ok, map} | {:error, term}
   def record_payment(
         invoice_id,
         id_at_gateway,
         transaction_date,
         opts \\ []
-      ) do
+      )
+      when is_binary(invoice_id) do
     comment = Keyword.get(opts, :comment, "")
     payment_method = Keyword.get(opts, :payment_method, "other")
 

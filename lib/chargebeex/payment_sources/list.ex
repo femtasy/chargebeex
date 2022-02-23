@@ -11,11 +11,11 @@ defmodule Chargebeex.PaymentSources.List do
 
   See: https://apidocs.chargebee.com/docs/api/payment_sources#list_payment_sources_customer_id
   """
-  @spec by_customer_id(customer_id :: integer()) ::
+  @spec by_customer_id(customer_id :: String.t()) ::
           {:ok, map} | {:error, term}
-  def by_customer_id(customer_id) do
+  def by_customer_id(customer_id) when is_binary(customer_id) do
     Client.new()
-    |> Tesla.get("/payment_sources/", query: ["customer_id[is]": "#{customer_id}"])
+    |> Tesla.get("/payment_sources/", query: ["customer_id[is]": customer_id])
     |> Client.handle_response()
   end
 

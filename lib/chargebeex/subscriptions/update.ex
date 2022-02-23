@@ -13,7 +13,7 @@ defmodule Chargebeex.Subscriptions.Update do
   """
   @spec update_subscription(subscription_id :: String.t(), map()) ::
           {:ok, map} | {:error, term}
-  def update_subscription(subscription_id, attrs) do
+  def update_subscription(subscription_id, attrs) when is_binary(subscription_id) do
     Logger.metadata(subscription_id: subscription_id)
 
     Logger.info("Update subscription #{subscription_id} with #{inspect(attrs)}")

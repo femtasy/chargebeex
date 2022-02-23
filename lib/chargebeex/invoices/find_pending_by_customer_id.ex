@@ -11,7 +11,7 @@ defmodule Chargebeex.Invoices.FindPendingByCustomerId do
   """
   @spec find_all_pending(String.t()) ::
           {:ok, map} | {:error, term}
-  def find_all_pending(customer_id) do
+  def find_all_pending(customer_id) when is_binary(customer_id) do
     Client.new()
     |> Tesla.get("/invoices/",
       query: ["customer_id[is]": "#{customer_id}", "status[is]": "payment_due"]
