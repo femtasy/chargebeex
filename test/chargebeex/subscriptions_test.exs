@@ -9,95 +9,36 @@ defmodule Chargebeex.SubscriptionsTest do
 
   setup [:verify_on_exit!]
 
-  describe "has_an_active_subscription?/1" do
-    test "returns true if the customer has one or more active subscriptions" do
-      response_body = %{"list" => ["subscription_1", "subscription_2"]}
+  describe "validate_subscriptions_response/1" do
+    test "returns a tuple if the result has is error" do
+      validated_subscriptions = Subscriptions.validate_subscriptions_response({:error, 1234})
 
-      Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{
-                                                url: "/subscriptions/",
-                                                method: :get
-                                              },
-                                              _opts ->
-        {:ok,
-         %Tesla.Env{
-           body: response_body,
-           status: 200
-         }}
-      end)
-
-      assert Subscriptions.has_an_active_subscription?(1234)
+      assert validated_subscriptions == {:error, "Error getting the subscriptions"}
     end
 
-    test "returns false if the customer does not have active subscriptions" do
-      response_body = %{"list" => []}
+    test "returns the subscriptions is the result is success" do
+      validated_subscriptions =
+        Subscriptions.validate_subscriptions_response({:ok, %{"list" => ["a subscription"]}})
 
-      Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{
-                                                url: "/subscriptions/",
-                                                method: :get
-                                              },
-                                              _opts ->
-        {:ok,
-         %Tesla.Env{
-           body: response_body,
-           status: 200
-         }}
-      end)
-
-      refute Subscriptions.has_an_active_subscription?(1234)
-    end
-
-    test "returns false in any other case" do
-      Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{
-                                                url: "/subscriptions/",
-                                                method: :get
-                                              },
-                                              _opts ->
-        {:error, "connection refused"}
-      end)
-
-      refute Subscriptions.has_an_active_subscription?(1234)
+      assert validated_subscriptions == ["a subscription"]
     end
   end
 
-  describe "has_an_in_trial_subscription?/1" do
-    test "returns true if the customer has one or more in_trial subscriptions" do
-      response_body = %{"list" => ["subscription_1", "subscription_2"]}
+  describe "unwrap_subscriptions_response/1" do
+    test "returns a tuple if the result has is error" do
+      validated_subscriptions = Subscriptions.unwrap_subscriptions_response({:error, 1234})
 
-      Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{
-                                                url: "/subscriptions/",
-                                                method: :get
-                                              },
-                                              _opts ->
-        {:ok, %Tesla.Env{status: 200, body: response_body}}
-      end)
-
-      assert Subscriptions.has_an_in_trial_subscription?(1234)
+      assert validated_subscriptions == {:error, 1234}
     end
 
-    test "returns false if the customer does not have in_trial subscriptions" do
-      response_body = %{"list" => []}
+    test "returns the subscriptions is the result is success" do
+      unwrapper_subscriptions =
+        Subscriptions.unwrap_subscriptions_response([
+          %{"subscription" => "subscription 1"},
+          %{"subscription" => "subscription 2"}
+        ])
 
-      Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{
-                                                url: "/subscriptions/",
-                                                method: :get
-                                              },
-                                              _opts ->
-        {:ok, %Tesla.Env{status: 200, body: response_body}}
-      end)
-
-      refute Subscriptions.has_an_in_trial_subscription?(1234)
-    end
-
-    test "returns false in any other case" do
-      Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{
-                                                url: "/subscriptions/",
-                                                method: :get
-                                              },
-                                              _opts ->
-        {:error, "connection refused"}
-      end)
-
-      refute Subscriptions.has_an_in_trial_subscription?(1234)
+      assert unwrapper_subscriptions == ["subscription 1", "subscription 2"]
     end
   end
 end

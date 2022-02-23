@@ -37,34 +37,6 @@ defmodule Chargebeex.Subscriptions do
   defdelegate update_subscription(subscription_id, attrs), to: Update
 
   @doc """
-  Returns true if the given customer has at least one active subscription.
-  """
-  @spec has_an_active_subscription?(customer_id :: integer(), opts :: keyword) :: boolean
-  def has_an_active_subscription?(customer_id, opts \\ []) when is_number(customer_id) do
-    [query: ["customer_id[is]": customer_id, "status[is]": "active"]]
-    |> Keyword.merge(opts)
-    |> list()
-    |> case do
-      {:ok, %{"list" => subscriptions}} when length(subscriptions) >= 1 -> true
-      _ -> false
-    end
-  end
-
-  @doc """
-  Returns true if the given customer has at least one in trial subscription.
-  """
-  @spec has_an_in_trial_subscription?(customer_id :: integer(), opts :: keyword) :: boolean
-  def has_an_in_trial_subscription?(customer_id, opts \\ []) when is_number(customer_id) do
-    [query: ["customer_id[is]": customer_id, "status[is]": "in_trial"]]
-    |> Keyword.merge(opts)
-    |> list()
-    |> case do
-      {:ok, %{"list" => subscriptions}} when length(subscriptions) >= 1 -> true
-      _ -> false
-    end
-  end
-
-  @doc """
   Returns the subscriptions wrapped in the _list_ key in a Chargebee response.
 
   This function does not run any validation on the subscriptions, it just
