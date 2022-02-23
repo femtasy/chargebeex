@@ -23,11 +23,11 @@ defmodule Chargebeex.PaymentSources.List do
   Filters the valid payment sources from the given list of payment sources.
 
   ## Examples
-  iex> filter_valid_payment_sources([%{"payment_source"=> %{"id" => "23", "status" => "valid"}}])
-      [%{"payment_source"=> %{"id" => "23", "status" => "valid"}}]
+    iex> #{__MODULE__}.filter_valid_payment_sources([%{"payment_source"=> %{"id" => "23", "status" => "valid"}}])
+    [%{"payment_source"=> %{"id" => "23", "status" => "valid"}}]
 
-      iex> filter_valid_payment_sources([%{"payment_source"=> %{"id" => "5", "status" => "invalid"}}])
-      []
+    iex> #{__MODULE__}.filter_valid_payment_sources([%{"payment_source"=> %{"id" => "5", "status" => "invalid"}}])
+    []
   """
   @spec filter_valid_payment_sources(payment_sources :: list(map())) :: list(map())
   def filter_valid_payment_sources(payment_sources) do

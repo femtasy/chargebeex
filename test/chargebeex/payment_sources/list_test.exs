@@ -1,6 +1,8 @@
 defmodule Chargebeex.PaymentSources.ListTest do
   use ExUnit.Case, async: true
 
+  doctest Chargebeex.PaymentSources.List
+
   alias Chargebeex.PaymentSources.List
 
   describe "list/2" do
