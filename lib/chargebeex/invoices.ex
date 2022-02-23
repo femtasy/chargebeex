@@ -11,7 +11,7 @@ defmodule Chargebeex.Invoices do
 
     @callback find_all_pending(String.t()) :: {:ok, map} | {:error, term}
 
-    @callback record_payment(map(), String.t(), integer()) :: {:ok, map} | {:error, term}
+    @callback record_payment(String.t(), String.t(), integer()) :: {:ok, map} | {:error, term}
 
     @callback record_payment(String.t(), String.t(), integer(), keyword()) ::
                 {:ok, map} | {:error, term}
