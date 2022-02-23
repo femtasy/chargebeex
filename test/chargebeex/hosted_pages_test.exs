@@ -26,8 +26,7 @@ defmodule Chargebeex.HostedPageCheckoutTest do
           "state" => "created",
           "type" => "checkout_new",
           "updated_at" => 1_644_940_689,
-          "url" =>
-            "https://pinkinternet-test.chargebee.com/pages/v3/xTDWYMWSePGDjypcdagkkdgQdIkac3DTk/"
+          "url" => "/pages/v3/xTDWYMWSePGDjypcdagkkdgQdIkac3DTk/"
         }
       }
 
@@ -44,7 +43,7 @@ defmodule Chargebeex.HostedPageCheckoutTest do
            body: chargebee_checkout_response,
            method: :post,
            status: 200,
-           url: "https://pinkinternet-test.chargebee.com/api/v2/hosted_pages/checkout_new"
+           url: "/hosted_pages/checkout_new"
          }}
       end)
 
@@ -69,7 +68,7 @@ defmodule Chargebeex.HostedPageCheckoutTest do
            },
            method: :post,
            status: 400,
-           url: "https://pinkinternet-test.chargebee.com/api/v2/hosted_pages/checkout_new"
+           url: "/hosted_pages/checkout_new"
          }}
       end)
 

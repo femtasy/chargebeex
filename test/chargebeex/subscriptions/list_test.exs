@@ -21,7 +21,7 @@ defmodule Chargebeex.Subscriptions.ListTest do
            body: response_body,
            method: :get,
            status: 200,
-           url: "https://pinkinternet-test.chargebee.com/api/v2/hosted_pages/checkout_new"
+           url: "/hosted_pages/checkout_new"
          }}
       end)
 
