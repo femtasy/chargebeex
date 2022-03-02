@@ -33,10 +33,10 @@ defmodule Chargebeex.HostedPageCheckoutTest do
       Mox.expect(Tesla.MockAdapter, :call, fn %Tesla.Env{body: body, method: method}, _opts ->
         assert method == :post
 
-        encoded_customer_email = URI.encode_www_form(email)
+        decoded_body = URI.decode_www_form(body)
 
-        assert body ==
-                 "customer%5Bemail%5D=#{encoded_customer_email}&customer%5Bid%5D=#{id}&customer%5Blocale%5D=#{locale}&subscription%5Bplan_id%5D=#{plan_id}"
+        assert decoded_body ==
+                 "customer[email]=fake_email&customer[id]=23&customer[locale]=cat&subscription[plan_id]=my-plan&coupon_ids[0]=23&coupon_ids[1]=5"
 
         {:ok,
          %Tesla.Env{
@@ -48,7 +48,7 @@ defmodule Chargebeex.HostedPageCheckoutTest do
       end)
 
       assert {:ok, ^chargebee_checkout_response} =
-               HostedPages.create_checkout(plan_id, id, email, locale)
+               HostedPages.create_checkout(plan_id, id, email, locale, coupon_ids: ["23", "5"])
     end
   end
 
