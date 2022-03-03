@@ -8,6 +8,14 @@ defmodule Chargebeex.HostedPages.Checkout do
 
   alias Chargebeex.Client
 
+  @typedoc """
+  Optional fields to create the subscription:
+
+  * `coupon_ids`: List of coupons ids or codes to be applied to the new
+  subscription.
+  """
+  @type optional_fields :: [coupon_ids: list(String.t())]
+
   @doc """
   Creates a checkout for the given customer for the given plan.
   """
@@ -15,13 +23,16 @@ defmodule Chargebeex.HostedPages.Checkout do
           plan_id :: String.t(),
           customer_id :: String.t(),
           email :: String.t(),
-          locale :: String.t()
+          locale :: String.t(),
+          opts :: optional_fields()
         ) ::
           {:error, any} | {:ok, map()}
-  def create_checkout(plan_id, customer_id, email, locale)
+  def create_checkout(plan_id, customer_id, email, locale, opts \\ [])
       when is_binary(plan_id) and is_binary(customer_id) do
+    body = build_body(plan_id, customer_id, email, locale, opts)
+
     Client.new()
-    |> Tesla.post("/hosted_pages/checkout_new", build_body(plan_id, customer_id, email, locale))
+    |> Tesla.post("/hosted_pages/checkout_new", body)
     |> Client.handle_response()
     |> maybe_log_message()
   end
@@ -34,15 +45,25 @@ defmodule Chargebeex.HostedPages.Checkout do
           plan_id :: String.t(),
           customer_id :: String.t(),
           email :: String.t(),
-          locale :: String.t()
+          locale :: String.t(),
+          opts :: optional_fields()
         ) :: map()
-  defp build_body(plan_id, customer_id, email, locale) do
+  defp build_body(plan_id, customer_id, email, locale, opts) do
+    coupon_ids_map =
+      Keyword.get(opts, :coupon_ids, [])
+      |> Enum.with_index()
+      |> Enum.map(fn {coupon_id, index} ->
+        {"coupon_ids[#{index}]", coupon_id}
+      end)
+      |> Enum.into(%{})
+
     %{
       "customer[id]": customer_id,
       "customer[email]": email,
       "customer[locale]": locale,
       "subscription[plan_id]": plan_id
     }
+    |> Map.merge(coupon_ids_map)
   end
 
   @spec maybe_log_message({:ok, map()} | {:error, any()}) :: {:error, any()} | {:ok, map()}
