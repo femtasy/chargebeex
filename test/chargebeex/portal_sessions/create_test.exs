@@ -1,7 +1,11 @@
 defmodule Chargebeex.PortalSessions.CreateTest do
   use ExUnit.Case, async: true
 
+  import Mox
+
   alias Chargebeex.PortalSessions.Create
+
+  setup [:verify_on_exit!]
 
   describe "create/1" do
     test "returns a map with the response" do
