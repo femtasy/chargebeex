@@ -36,7 +36,7 @@ defmodule Chargebeex.HostedPageCheckoutTest do
         decoded_body = URI.decode_www_form(body)
 
         assert decoded_body ==
-                 "customer[email]=fake_email&customer[id]=23&customer[locale]=cat&subscription[plan_id]=my-plan&coupon_ids[0]=23&coupon_ids[1]=5"
+                 "customer[email]=fake_email&customer[id]=23&customer[locale]=cat&subscription[plan_id]=my-plan&coupon_ids[0]=23&coupon_ids[1]=5&subscription[trial_end]=0"
 
         {:ok,
          %Tesla.Env{
@@ -48,7 +48,10 @@ defmodule Chargebeex.HostedPageCheckoutTest do
       end)
 
       assert {:ok, ^chargebee_checkout_response} =
-               HostedPages.create_checkout(plan_id, id, email, locale, coupon_ids: ["23", "5"])
+               HostedPages.create_checkout(plan_id, id, email, locale,
+                 coupon_ids: ["23", "5"],
+                 trial_end: 0
+               )
     end
 
     test "sends correct params to Chargebee", %{
