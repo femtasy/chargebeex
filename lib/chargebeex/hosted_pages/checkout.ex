@@ -13,8 +13,10 @@ defmodule Chargebeex.HostedPages.Checkout do
 
   * `coupon_ids`: List of coupons ids or codes to be applied to the new
   subscription.
+  * `trial_end`: The time at which the trial ends for this subscription. A value
+  of `0` means the subscription will be activated immediately.
   """
-  @type optional_fields :: [coupon_ids: list(String.t())]
+  @type optional_fields :: [coupon_ids: list(String.t()), trial_end: non_neg_integer() | nil]
 
   @doc """
   Creates a checkout for the given customer for the given plan.
@@ -57,6 +59,8 @@ defmodule Chargebeex.HostedPages.Checkout do
       end)
       |> Enum.into(%{})
 
+    trial_end = Keyword.get(opts, :trial_end, nil)
+
     %{
       "customer[id]": customer_id,
       "customer[email]": email,
@@ -64,6 +68,7 @@ defmodule Chargebeex.HostedPages.Checkout do
       "subscription[plan_id]": plan_id
     }
     |> Map.merge(coupon_ids_map)
+    |> maybe_put_trial_end(trial_end)
   end
 
   @spec maybe_log_message({:ok, map()} | {:error, any()}) :: {:error, any()} | {:ok, map()}
@@ -78,4 +83,10 @@ defmodule Chargebeex.HostedPages.Checkout do
   end
 
   defp maybe_log_message(result), do: result
+
+  defp maybe_put_trial_end(map, nil), do: map
+
+  defp maybe_put_trial_end(map, trial_end) do
+    Map.put(map, "subscription[trial_end]", trial_end)
+  end
 end
